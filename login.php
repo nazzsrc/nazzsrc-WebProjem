@@ -2,40 +2,30 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Login | Huriyenaz Sarıca</title>
+    <title>Giriş Yap</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background: #f4f7f6; }
-        .login-container { max-width: 400px; margin-top: 100px; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="container login-container">
-        <div class="card shadow-lg border-0">
-            <div class="card-header bg-primary text-white text-center">
-                <h4>Öğrenci Giriş Sistemi</h4>
-            </div>
-            <div class="card-body p-4">
-                <form action="islem.php" method="POST">
-                    <div class="mb-3">
-                        <label class="form-label">Kullanıcı Adı (Email)</label>
-                        <input type="email" name="email" class="form-control" placeholder="b241210063@sakarya.edu.tr" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Şifre</label>
-                        <input type="password" name="password" class="form-control" placeholder="b241210063" required>
-                    </div>
-                    <button type="submit" name="loginButon" class="btn btn-primary w-100">Giriş Yap</button>
-                </form>
-                <?php if(isset($_GET['hata'])): ?>
-                    <div class="alert alert-danger mt-3 py-2 text-center">Hatalı Giriş!</div>
-                <?php endif; ?>
+<body class="bg-primary d-flex align-items-center" style="height: 100vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card p-4 shadow-lg border-0 rounded-4">
+                    <h3 class="text-center mb-4">Öğrenci Girişi</h3>
+                    <form action="islem.php" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label small text-muted">Kullanıcı Adı (E-posta)</label>
+                            <input type="text" name="user" class="form-control" placeholder="g2412100xx@sakarya.edu.tr">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small text-muted">Şifre (Öğrenci No)</label>
+                            <input type="password" name="pass" class="form-control" placeholder="g2412100xx">
+                        </div>
+                        <button type="submit" name="login_btn" class="btn btn-primary w-100 py-2">Giriş Yap</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </body>
 </html>
-
-
-
-

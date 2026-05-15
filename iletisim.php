@@ -2,106 +2,58 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>İletişim | Huriyenaz Sarıca</title>
+    <title>İletişim | Denetim Paneli</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">Huriyenaz</a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="index.php">Hakkında</a>
-                <a class="nav-link" href="iletisim.php">İletişim</a>
-            </div>
+<body>
+    <div id="app" class="container my-5">
+        <div class="card shadow p-4 border-0 rounded-4">
+            <h2 class="text-center text-primary mb-4">İletişim Formu</h2>
+            <form id="contactForm" action="islem.php" method="POST">
+                <div class="mb-3">
+                    <input type="text" name="ad" v-model="ad" class="form-control" placeholder="Adınız">
+                </div>
+                <div class="mb-3">
+                    <input type="email" name="email" v-model="email" class="form-control" placeholder="E-posta (Örn: b24@sakarya.edu.tr)">
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="tel" v-model="tel" class="form-control" placeholder="Telefon (Sadece Rakam)">
+                </div>
+                <div class="mb-3">
+                    <textarea name="mesaj" class="form-control" placeholder="Mesajınız"></textarea>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <button type="button" onclick="validateNative()" class="btn btn-outline-primary px-4">Native JS ile Gönder</button>
+                    <button type="button" @click="validateVue" class="btn btn-primary px-4">Vue.js ile Gönder</button>
+                </div>
+            </form>
         </div>
-    </nav>
-
-    <div id="app" class="container mt-5 p-4 bg-white shadow rounded">
-        <h2 class="mb-4">İletişim Formu</h2>
-        <form id="contactForm" action="islem.php" method="POST">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label>Ad Soyad</label>
-                    <input type="text" id="adsoyad" name="adsoyad" v-model="form.adsoyad" class="form-control">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>E-posta</label>
-                    <input type="email" id="email" name="email" v-model="form.email" class="form-control">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>Telefon (Sadece Rakam)</label>
-                    <input type="text" id="tel" name="tel" v-model="form.tel" class="form-control">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>Konu</label>
-                    <select name="konu" v-model="form.konu" class="form-select">
-                        <option value="Destek">Destek</option>
-                        <option value="Öneri">Öneri</option>
-                    </select>
-                </div>
-                <div class="col-12 mb-3">
-                    <label>Cinsiyet: </label>
-                    <input type="radio" name="cins" value="Kadin" v-model="form.cins"> Kadın
-                    <input type="radio" name="cins" value="Erkek" v-model="form.cins"> Erkek
-                </div>
-                <div class="col-12 mb-3">
-                    <input type="checkbox" v-model="form.onay" name="onay"> Bilgilerimin doğruluğunu onaylıyorum.
-                </div>
-            </div>
-
-            <div class="mt-4">
-                <button type="button" class="btn btn-warning" onclick="validateNative()">Native JS ile Denetle</button>
-                <button type="submit" class="btn btn-success" @click.prevent="validateVue">Vue.js ile Gönder</button>
-                <button type="reset" class="btn btn-danger">Temizle</button>
-            </div>
-        </form>
     </div>
 
     <script>
-        // 1. NATIVE JAVASCRIPT DENETİMİ
+        // NATIVE JS DENETİMİ
         function validateNative() {
-            const ad = document.getElementById('adsoyad').value;
-            const email = document.getElementById('email').value;
-            const tel = document.getElementById('tel').value;
-
-            if (ad === "" || email === "") {
-                alert("Native JS: Ad ve Email boş bırakılamaz!");
-                return;
-            }
-            if (isNaN(tel)) {
-                alert("Native JS: Telefon sadece rakam olmalı!");
-                return;
-            }
-            alert("Native JS: Form geçerli! (Veri gönderilmedi, sadece kontrol yapıldı)");
+            const email = document.getElementsByName('email')[0].value;
+            const tel = document.getElementsByName('tel')[0].value;
+            if(!email.includes('@')) { alert('Geçersiz e-mail (Native JS)'); return; }
+            if(isNaN(tel)) { alert('Telefon sadece rakam olmalı (Native JS)'); return; }
+            document.getElementById('contactForm').submit();
         }
 
-        // 2. VUE.JS DENETİMİ
-        const { createApp } = Vue
+        // VUE.JS DENETİMİ
+        const { createApp } = Vue;
         createApp({
-            data() {
-                return {
-                    form: { adsoyad: '', email: '', tel: '', konu: 'Destek', cins: '', onay: false }
-                }
-            },
+            data() { return { ad: '', email: '', tel: '' } },
             methods: {
                 validateVue() {
-                    if (!this.form.email.includes('@')) {
-                        alert("Vue.js: Geçersiz email formatı!");
-                    } else if (this.form.adsoyad.length < 3) {
-                        alert("Vue.js: İsim çok kısa!");
-                    } else if (!this.form.onay) {
-                        alert("Vue.js: Onay kutusunu işaretleyin!");
-                    } else {
-                        alert("Vue.js: Başarılı! Sunucuya gönderiliyor...");
-                        document.getElementById('contactForm').submit();
-                    }
+                    if(!this.email || !this.ad) { alert('Boş alan bırakmayınız (Vue.js)'); }
+                    else { document.getElementById('contactForm').submit(); }
                 }
             }
-        }).mount('#app')
+        }).mount('#app');
     </script>
 </body>
 </html>
-
-
-
